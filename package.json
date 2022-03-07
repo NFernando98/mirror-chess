@@ -1,0 +1,14 @@
+{
+    "scripts": {
+        "start": "npm start --prefix mainpage",
+        "test": "npm start --prefix iframepage",
+        "dev": "npm run start | npm run test"
+    },
+    "devDependencies": {
+        "@angular-devkit/build-angular": "^13.2.5"
+    },
+    "dependencies": {
+        "@angular/platform-browser": "^13.2.5",
+        "@angular/router": "^13.2.5"
+    }
+}
