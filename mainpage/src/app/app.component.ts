@@ -1,6 +1,6 @@
-import { Component, ViewChild, ElementRef  } from '@angular/core';
+import { Component, ViewChild, ElementRef, ContentChild  } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MoveChange, NgxChessBoardView } from 'ngx-chess-board';
+import { MoveChange, NgxChessBoardComponent, NgxChessBoardView } from 'ngx-chess-board';
 import { CoordsProvider } from 'ngx-chess-board/lib/engine/coords/coords-provider';
 
 
@@ -11,20 +11,6 @@ import { CoordsProvider } from 'ngx-chess-board/lib/engine/coords/coords-provide
   
 })
 
-
-
-export class AppComponent {
-  title = 'mainpage';
-  url: string = "http://localhost:4401/";
-  urlSafe: any;
-  sentdata(){
-    console.log("test");
-  }
-  
-
-  // @ViewChild('board', { static: false })
-  // board!: NgxChessBoardView;
-
   // ngAfterViewInit() {
   //   let content = '<button id="button" class="button" >My button </button>';
   //   let doc =  this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
@@ -33,25 +19,51 @@ export class AppComponent {
   //   doc.close();
   // }
 
+
+
+export class AppComponent {
+  @ViewChild('iframe')
+  boardManager!: NgxChessBoardComponent;
+  
+
+  title = 'mainpage';
+  url: string = "http://localhost:4401/";
+  urlSafe: any;
+  sentdata(){
+    console.log("test");
+  }
+  
+
   constructor(public sanitizer: DomSanitizer) {
-    this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
-    window.addEventListener("message", (event)=>{
-      console.log("message sent: ", event.data);  
-    })
+    this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);                                             
     window.addEventListener("message", (event)=>{
       console.log("message sent: ", event.data);
-      
-      
-      let iframe = document.getElementById('iframe1') as HTMLIFrameElement;
-      console.log("test", iframe);
+
+      var iframe1 = document.getElementsByTagName("iframe")[1].contentWindow;
+      console.log("x: ", iframe1);
+      iframe1?.postMessage(event.data, "*");  
     }) 
 
-    
+    window.addEventListener("message", (ev) =>{
+      console.log("message came back", ev);
+      if(ev.data === "iframe1"){
+        console.log("make this move on other iframe2");
+        this.boardManager.move('d2d4');
+      }
+    })
+
+  
 
   }
 
   
 
+  // public moveManual(): void {
+  //   window.addEventListener("message", () =>{
+  //     this.boardManager.move('d2d4');
+  // })
+
+  
 
 }
 
@@ -61,9 +73,8 @@ export class AppComponent {
 
 
 
-function jQuery(document: Document) {
-  throw new Error('Function not implemented.');
-}
+
+
 
 
 // stuff that was removed from constructor
