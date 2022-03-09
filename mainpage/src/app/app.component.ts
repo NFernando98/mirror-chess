@@ -35,22 +35,20 @@ export class AppComponent {
   
 
   constructor(public sanitizer: DomSanitizer) {
-    this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);                                             
-    window.addEventListener("message", (event)=>{
-      console.log("message sent: ", event.data);
+    this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);   
 
-      var iframe1 = document.getElementsByTagName("iframe")[1].contentWindow;
-      console.log("x: ", iframe1);
-      iframe1?.postMessage(event.data, "*");  
+    window.addEventListener("message", (event)=>{
+      console.log("parent recieves: ", event.data);
+
+        let move = event.data[1];
+        console.log("accessing move data: ", move);
+
+        let iframe2 = document.getElementsByTagName("iframe")[1].contentWindow;
+        console.log("iframe2: ", iframe2);
+        iframe2?.postMessage(event.data, "*");   
+          
     }) 
 
-    window.addEventListener("message", (ev) =>{
-      console.log("message came back", ev);
-      if(ev.data === "iframe1"){
-        console.log("make this move on other iframe2");
-        this.boardManager.move('d2d4');
-      }
-    })
 
   
 
