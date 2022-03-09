@@ -32,22 +32,23 @@ export class AppComponent {
 
   public moveCallback(move: MoveChange): void {   
     console.log("player just made a move", move, " in window", window.name);
-
-
-    window.parent.postMessage(move,"*");
-    // window.parent.postMessage(window.name,"*");
-
-    
+    window.parent.postMessage({gameMove: move, player: window.name} ,"*");
+    // window.parent.postMessage(window.name,"*");   
   }
 
 
   // move after recieving back from mainpage
   public moveManual(): void {
     window.addEventListener("message", (e) =>{
-      console.log("message came back", e.data);
-      let moveToMake = e.source;
-      console.log(moveToMake);
-      this.boardManager.move('d2d4');
+      if(e.data.player){
+        if(e.data?.player !== window.name){
+          console.log("e.data: ", e.data, window.name);
+          let moveToMake = e.data.gameMove;
+          console.log(moveToMake);
+          this.boardManager.move(moveToMake.move);
+        } 
+      }
+     
     })
   }
 
