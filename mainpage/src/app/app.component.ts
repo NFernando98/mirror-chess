@@ -46,6 +46,7 @@ export class AppComponent {
         let iframe2 = document.getElementsByTagName("iframe")[1].contentWindow;
         console.log("iframe2: ", iframe2);
         iframe2?.postMessage(event.data, "*");   
+        
           
     }) 
 

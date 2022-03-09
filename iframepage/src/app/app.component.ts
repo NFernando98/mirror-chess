@@ -37,10 +37,6 @@ export class AppComponent {
     window.parent.postMessage(move,"*");
     // window.parent.postMessage(window.name,"*");
 
-    window.addEventListener("Load", () =>{
-      console.log("message came back");
-      this.boardManager.move('d2d4');
-    })
     
   }
 
@@ -48,7 +44,9 @@ export class AppComponent {
   // move after recieving back from mainpage
   public moveManual(): void {
     window.addEventListener("message", (e) =>{
-      console.log("message came back");
+      console.log("message came back", e.data);
+      let moveToMake = e.source;
+      console.log(moveToMake);
       this.boardManager.move('d2d4');
     })
   }
